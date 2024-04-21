@@ -1,7 +1,13 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using N5.Infraestructure.DataContext;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Mapper Configuration
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IMapper, Mapper>();
 
 // Add services to the container.
 
