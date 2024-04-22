@@ -30,10 +30,11 @@ namespace N5.Infrastructure.Repositories
             return _mapper.Map<List<Permission>>(permissionsEntity);
         }
 
-        public async Task AddPermissionAsync(Permission permission)
+        public async Task<IEntity<int>> AddPermissionAsync(Permission permission)
         {
             var permissionEntity = _mapper.Map<PermissionEntity>(permission);
-            await _context.Permissions.AddAsync(permissionEntity);
+            var insertedPermission = await _context.Permissions.AddAsync(permissionEntity);
+            return new Entity<int>(insertedPermission, nameof(permissionEntity.Id));
         }
 
         public async Task UpdatePermissionAsync(Permission permission)

@@ -1,6 +1,4 @@
-﻿// N5.Application/Commands/CreatePermissionCommand.cs
-
-namespace N5.Application.Commands
+﻿namespace N5.Application.Commands
 {
     public class CreatePermissionCommand
     {
@@ -8,5 +6,6 @@ namespace N5.Application.Commands
         public string EmployeeSurname { get; set; }
         public DateTime PermissionDate { get; set; }
         public int PermissionTypeId { get; set; }
+        public string PermissionTypeDescription { get; set; }
     }
 }

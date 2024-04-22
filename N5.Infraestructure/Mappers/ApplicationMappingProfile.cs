@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using N5.Domain.Entities;
 using N5.Infraestructure.DbEntities;
+using N5.Infraestructure.ElasticEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace N5.Infraestructure.Mappers
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.EmployeeSurname, opt => opt.MapFrom(src => src.EmployeeSurname))
                 .ForMember(dest => dest.EmployeeForename, opt => opt.MapFrom(src => src.EmployeeForename))
-                .ForMember(dest => dest.PermissionDate, opt => opt.MapFrom(src => src.PermissionDate))
+                .ForMember(dest => dest.PermissionDate, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.PermissionType, opt => opt.MapFrom(src => src.PermissionType))
                 .ReverseMap();
 
@@ -25,6 +26,20 @@ namespace N5.Infraestructure.Mappers
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Permissions, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<PermissionEntity, PermissionDocument>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.EmployeeForename, opt => opt.MapFrom(src => src.EmployeeForename))
+                .ForMember(dest => dest.EmployeeSurname, opt => opt.MapFrom(src => src.EmployeeSurname))
+                .ForMember(dest => dest.PermissionDate, opt => opt.MapFrom(src => src.PermissionDate))
+                .ForMember(dest => dest.PermissionTypeDocument, opt => opt.MapFrom(src => src.PermissionType))
+                .ReverseMap();
+
+
+            CreateMap<PermissionTypeDocument, PermissionTypeEntity>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ReverseMap();
         }
     }

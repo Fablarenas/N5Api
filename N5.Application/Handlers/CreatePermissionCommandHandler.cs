@@ -2,7 +2,6 @@
 using AutoMapper;
 using N5.Domain.Entities;
 using N5.Domain.Repositories;
-using System.Threading.Tasks;
 
 namespace N5.Application.Commands.Handlers
 {
@@ -20,8 +19,9 @@ namespace N5.Application.Commands.Handlers
         public async Task<int> Handle(CreatePermissionCommand command)
         {
             var permission = _mapper.Map<Permission>(command);
-            await _unitOfWork.Permissions.UpdatePermissionAsync(permission);
+            IEntity<int> permissionEntity = await _unitOfWork.Permissions.AddPermissionAsync(permission);
             await _unitOfWork.CompleteAsync();
+            permission.Id = permissionEntity.Item.Entity.Id;
             return permission.Id;
         }
     }

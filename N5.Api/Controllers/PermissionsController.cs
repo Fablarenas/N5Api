@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using N5.Application.Dtos;
 using N5.Application.Interfaces;
-using N5.Application.Services;
 
 
 namespace N5.Api.Controllers
