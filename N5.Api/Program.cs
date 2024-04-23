@@ -13,10 +13,16 @@ using N5.Infraestructure.Repositories;
 using N5.Infrastructure.Repositories;
 using N5.Infrastructure.Repositories.UnitWorks;
 using Nest;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .Enrich.FromLogContext()
+    .MinimumLevel.Warning() 
+    .MinimumLevel.Override("N5.Api", Serilog.Events.LogEventLevel.Information)
+    .WriteTo.File("logs/myapp.txt", rollingInterval: RollingInterval.Day));
 // Mapper Configuration
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -66,7 +72,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseMiddleware<KafkaLoggingMiddleware>();
 
 app.UseHttpsRedirection();

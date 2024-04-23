@@ -26,7 +26,7 @@ namespace N5.Infrastructure.Repositories
 
         public async Task<IEnumerable<Permission>> GetAllPermissionsAsync()
         {
-            var permissionsEntity = await _context.Permissions.ToListAsync();
+            var permissionsEntity = await _context.Permissions.Include(p => p.PermissionType).ToListAsync();
             return _mapper.Map<List<Permission>>(permissionsEntity);
         }
 
