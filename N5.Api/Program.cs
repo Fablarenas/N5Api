@@ -6,6 +6,7 @@ using N5.Api.Middlewares;
 using N5.Application.Commands.Handlers;
 using N5.Application.Handlers;
 using N5.Application.Interfaces;
+using N5.Application.Queries;
 using N5.Application.Services;
 using N5.Domain.Repositories;
 using N5.Infraestructure.DataContext;
@@ -38,8 +39,19 @@ builder.Services.AddScoped<CreatePermissionCommandHandler>();
 builder.Services.AddScoped<GetAllPermissionsQueryHandler>();
 builder.Services.AddScoped<ModifyPermissionCommandHandler>();
 builder.Services.AddScoped<GetPermissionTypeByIdHandler>();
+builder.Services.AddScoped<GetPermissionByIdQueryHandler>();
+builder.Services.AddScoped<GetPermissionTypeByIdQuery>();
 builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 builder.Services.AddSingleton<KafkaProducer>(serviceProvider => {
     var options = serviceProvider.GetRequiredService<IOptions<KafkaOptions>>().Value;
     return new KafkaProducer(options.BootstrapServers, options.Topic);
@@ -75,7 +87,7 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<KafkaLoggingMiddleware>();
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();

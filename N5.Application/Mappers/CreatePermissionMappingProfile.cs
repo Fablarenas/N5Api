@@ -11,7 +11,7 @@ namespace N5.Application.Mappers
         public CreatePermissionMappingProfile()
         {
 
-            //Create Permission
+            //Create Permissionf
             CreateMap<GetPermissionsDto, Permission>()
                 .ForMember(dest => dest.EmployeeSurname, opt => opt.MapFrom(src => src.EmployeeSurname))
                 .ForMember(dest => dest.EmployeeForename, opt => opt.MapFrom(src => src.EmployeeForename))
@@ -67,7 +67,13 @@ namespace N5.Application.Mappers
             CreateMap<GetPermissionTypeByIdQuery, CreatePermissionDto>()
                 .ForMember(dest => dest.PermissionTypeId, opt => opt.MapFrom(src => src.PermissionTypeId))
                 .ReverseMap();
-            
+
+
+            CreateMap<Permission, PermissionType>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PermissionTypeId))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.PermissionType.Description))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.PermissionType.Description))
+                .ReverseMap();
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿namespace N5.Application.Queries
+﻿namespace N5.Application.Querys
 {
-    public class GetPermissionTypeByIdQuery
+    public class GetPermissionByIdQuery
     {
-        public int PermissionTypeId { get; set; }
+       public int PermissionId { get; set; }
     }
 }

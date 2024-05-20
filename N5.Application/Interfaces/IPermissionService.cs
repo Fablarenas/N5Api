@@ -12,5 +12,6 @@ namespace N5.Application.Interfaces
         public Task<List<GetPermissionsDto>> GetPermissionsAsync();
         public Task<int> CreateRequestPermissionAsync(CreatePermissionDto createDto);
         public Task<int> ModifyPermissionAsync(ModifyPermissionDto modifyDto);
+        public Task<GetPermissionsDto> GetPermissionByIdAsync(int id);
     }
 }

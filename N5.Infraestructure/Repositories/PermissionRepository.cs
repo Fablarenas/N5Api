@@ -20,7 +20,9 @@ namespace N5.Infrastructure.Repositories
 
         public async Task<Permission> GetPermissionByIdAsync(int id)
         {
-            var permissionEntity = await _context.Permissions.FindAsync(id);
+            var permissionEntity = await _context.Permissions
+                .Include(p => p.PermissionType)
+                .FirstOrDefaultAsync(p => p.Id == id);
             return _mapper.Map<Permission>(permissionEntity);
         }
 

@@ -34,6 +34,22 @@ namespace N5.Api.Controllers
             return Ok(permissions);
         }
 
+        [HttpGet("id")]
+        public async Task<ActionResult<GetPermissionsDto>> GetPermissionById([FromQuery] int id)
+        {
+            _logger.LogInformation("Called Get() GetPermission");
+            var permissions = await _permissionService.GetPermissionByIdAsync(id);
+
+            if (permissions == null)
+            {
+                _logger.LogInformation("NotFound Get() GetPermission");
+                return NotFound("No permissions found.");
+            }
+
+            _logger.LogInformation("Ok Get() GetPermission");
+            return Ok(permissions);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreatePermission([FromBody] CreatePermissionDto createDto)

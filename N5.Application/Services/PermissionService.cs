@@ -15,24 +15,27 @@ namespace N5.Application.Services
         private readonly CreatePermissionCommandHandler _createPermissionHandler;
         private readonly GetAllPermissionsQueryHandler _getAllPermissionsHandler;
         private readonly ModifyPermissionCommandHandler _modifyPermissionCommandHandler;
-        private readonly GetPermissionTypeByIdHandler _getPermissionByIdHandler;
+        private readonly GetPermissionTypeByIdHandler _getPermissionTypeByIdHandler;
+        private readonly GetPermissionByIdQueryHandler _getPermissionByIdHandler;
         private readonly IMapper _mapper; 
         private readonly INotificationPermission _notificationPermission;
 
-        public PermissionService(CreatePermissionCommandHandler createHandler, IMapper mapper, GetAllPermissionsQueryHandler getAllPermissionsHandler, ModifyPermissionCommandHandler modifyPermissionCommandHandler, GetPermissionTypeByIdHandler getPermissionByIdHandler, INotificationPermission notificationPermission)
+        public PermissionService(CreatePermissionCommandHandler createHandler, IMapper mapper, GetAllPermissionsQueryHandler getAllPermissionsHandler, ModifyPermissionCommandHandler modifyPermissionCommandHandler, GetPermissionTypeByIdHandler getPermissionByIdHandler, INotificationPermission notificationPermission, GetPermissionByIdQueryHandler getPermissionByIdQueryHandler )
         {
             _createPermissionHandler = createHandler;
             _mapper = mapper;
             _getAllPermissionsHandler = getAllPermissionsHandler;
             _modifyPermissionCommandHandler = modifyPermissionCommandHandler;
-            _getPermissionByIdHandler = getPermissionByIdHandler;
+            _getPermissionTypeByIdHandler = getPermissionByIdHandler;
             _notificationPermission = notificationPermission;
+            _getPermissionByIdHandler = getPermissionByIdQueryHandler;
+
         }
 
         public async Task<int> CreateRequestPermissionAsync(CreatePermissionDto createDto)
         {
             var query = _mapper.Map<GetPermissionTypeByIdQuery>(createDto);
-            var permissionType = await _getPermissionByIdHandler.Handle(query);
+            var permissionType = await _getPermissionTypeByIdHandler.Handle(query);
             if (permissionType == null)
                 throw new Exception("No existe el tipo de permiso");
 
@@ -51,6 +54,13 @@ namespace N5.Application.Services
         public async Task<List<GetPermissionsDto>> GetPermissionsAsync()
         {
             return await _getAllPermissionsHandler.Handle();
+        }
+
+        public async Task<GetPermissionsDto> GetPermissionByIdAsync(int id)
+        {
+            var permissiontDomain = await _getPermissionByIdHandler.Handle(new Querys.GetPermissionByIdQuery{ PermissionId = id });
+            var permission = _mapper.Map<GetPermissionsDto>(permissiontDomain);
+            return permission;
         }
 
         public async Task<int> ModifyPermissionAsync(ModifyPermissionDto modifyDto)
